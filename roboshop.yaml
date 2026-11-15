@@ -20,37 +20,37 @@
     when: action == "create"
     register: ec2-output
 
-  - name: Print ec2 creation output
-    debug:
-      msg: "{{ ec2-output }}"
+  # - name: Print ec2 creation output
+  #   debug:
+  #     msg: "{{ ec2-output }}"
 
-  - name: creating r53 records
-    amazon.aws.route53:
-     state: present
-     zone: "{{ domain_name }}"
-     record: "{{ item.item }}.{{ domain_name }}"
-     type: A
-     ttl: 1
-     value: "{{ item.instances[0],private_ip_adress }}"
-     overwrite: true
-    loop: "{{ ec2-output.results }}"    
-    when: action == "create"
+  # - name: creating r53 records
+  #   amazon.aws.route53:
+  #    state: present
+  #    zone: "{{ domain_name }}"
+  #    record: "{{ item.item }}.{{ domain_name }}"
+  #    type: A
+  #    ttl: 1
+  #    value: "{{ item.instances[0],private_ip_adress }}"
+  #    overwrite: true
+  #   loop: "{{ ec2-output.results }}"    
+  #   when: action == "create"
 
-  - name: deleting r53 record
-    amazon.aws.route53:
-     state: absent
-     zone: "{{ domain_name }}"
-     record: "{{ item }}.{{ domain_name }}"
-     type: A
-     ttl: 1
-    loop: "{{ instances }}"
-    when: action == "delete"
+  # - name: deleting r53 record
+  #   amazon.aws.route53:
+  #    state: absent
+  #    zone: "{{ domain_name }}"
+  #    record: "{{ item }}.{{ domain_name }}"
+  #    type: A
+  #    ttl: 1
+  #   loop: "{{ instances }}"
+  #   when: action == "delete"
 
-  - name: delete ec2 instances
-    amazon.aws.ec2_instance:
-     state: absent
-     name: "roboshop-{{ item }}"
-     region: us-east-1
-     wait: false
-    loop: "{{ instances }}" 
-    when: action == "delete"
+  # - name: delete ec2 instances
+  #   amazon.aws.ec2_instance:
+  #    state: absent
+  #    name: "roboshop-{{ item }}"
+  #    region: us-east-1
+  #    wait: false
+  #   loop: "{{ instances }}" 
+  #   when: action == "delete"
