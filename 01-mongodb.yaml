@@ -1,7 +1,8 @@
-- name: MongoDb configuration
+- name: configure mongodb server
   hosts: mongodb
   become: yes
-  tasks: copy mongo.repo
-  ansible.builtin.copy:
-    src: mongo.repo
-    dest: /etc/yum.repos.d/mongo.repo
+  tasks:
+  - name: copy mongo.repo
+    copy:
+      src: mongo.repo
+      dest: /etc/yum.repos.d/mongo.repo
