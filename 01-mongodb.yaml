@@ -6,3 +6,7 @@
     copy:
       src: mongo.repo
       dest: /etc/yum.repos.d/mongo.repo
+
+  - name: test the mondobd vars
+    debug:
+      msg: "{{ app_name }}"    
