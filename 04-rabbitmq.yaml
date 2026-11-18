@@ -1,0 +1,40 @@
+- name: Configure rabbitmq
+  hosts: rabbitmq
+  become: yes
+  tasks:
+  - name: copy rabbitmq.repo
+    copy:
+      src: rabbitmq.repo
+      dest: /etc/yum.repos.d/rabbitmq.repo
+
+  # - name: installing rabbitmq-server
+  #   package:
+  #   name: erlang rabbitmq-server -y
+  #   state: present
+
+  # insted of using package module we use direct dnf because ansible again go and check_implicit_admin
+  - name:
+    dnf:
+     name: 
+       - erlang
+       - abbitmq-server
+     state: present 
+
+  - name: Start and enable rabbitmq
+    service:
+      name: rabbitmq-server
+      state: started
+      enabled: yes  
+
+  - name: Create RabbitMQ user with permissions
+    community.rabbitmq.rabbitmq_user:
+      user: roboshop
+      password: roboshop123
+      tags: monitoring
+      permissions:
+        - vhost: /
+          configure_priv: .*
+          read_priv: .*
+          write_priv: .*   
+          state: present            
+      

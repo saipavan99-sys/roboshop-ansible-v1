@@ -1,0 +1,72 @@
+- name: Configure cart
+  hosts: cart
+  become: yes
+  tasks:
+  - name: disable default nodejs
+    command: dnf module disable nodejs -y
+
+  - name: Enable nodejs 24
+    command: dnf module enable nodejs:24 -y
+
+  - name: install nodejs
+    dnf:
+     name: nodejs
+     state: present
+
+  - name: Create roboshop system user
+    user:
+     name: roboshop
+     create_home: false
+     home: /app
+     system: true
+     shell: /sbin/nologin
+     comment: "roboshop system user"   
+
+  - name: Remove existing app directory
+    file:
+     path: /app
+     state: absent
+
+   - name: Remove cart.zip
+    file:
+     path: /tmp/cart.zip
+     state: absent   
+
+  # While creating must and should state == directory otherwise it take as file
+  - name: creating app directory
+    file:
+     path: /app
+     state: directory
+
+  - name: Downloading cart application
+    get_url:
+     url: https://raw.githubusercontent.com/daws-92s/roboshop-documentation/refs/heads/main/artifacts/cart-{{ app_version }}.zip
+     dest: /tmp/cart.zip
+ 
+  - name: unzip cart
+    unarchive:
+     src: /tmp/cart.zip
+     dest: /app
+     remote_src: yes
+
+  - name: Install dependencies
+    community.general.npm:
+      path: /app    
+
+  - name: copy cart service
+    template:
+      src: cart.service.j2
+      dest: /etc/systemd/system/cart.service
+
+
+
+  - name: daemon_reload
+    systemd_service:
+     daemon_reload: true
+
+  - name: Start and enable cart
+    service:
+     name: cart
+     state: present
+     enabled: yes
+
