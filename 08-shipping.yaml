@@ -1,7 +1,7 @@
-- name: Configure shipping server
+- name: configure shipping server
   hosts: shipping
   become: yes
-  tasks: 
+  tasks:
   - name: enable maven 3.9
     command: dnf module enable maven:3.9 -y
 
@@ -22,15 +22,14 @@
   #   debug:
   #     msg: "{{ java25 }}"
 
-  # # std.out is command output
   # - name: make java25 as default
   #   command: alternatives --set java {{ java25.stdout }}
 
   # - name: set JAVA_HOME
   #   copy:
   #     content: "export JAVA_HOME={{ java25.stdout | dirname | dirname  }}"
-  #     dest: /etc/profile.d/java.sh    
-  
+  #     dest: /etc/profile.d/java.sh
+
   - name: create roboshop system user
     user:
       name: roboshop
@@ -75,7 +74,7 @@
   - name: print mvn version without JAVA_HOME
     debug:
       msg: "{{ mvn_default.stdout_lines }}"
-      
+
   - name: build shipping
     command: mvn clean package
     args:
@@ -83,7 +82,7 @@
     # environment:
     #   JAVA_HOME: "{{ java25.stdout | dirname | dirname  }}"
 
-  - name: Moveing shippimg jar file
+  - name: move shipping jar file
     command: mv target/shipping.jar shipping.jar
     args:
      chdir: /app
@@ -107,11 +106,10 @@
     tags:
     - mysql
 
-
   - name: create app user in mysql
     shell: mysql -h "{{ mysql_host }}" -u root -p{{ mysql_root_password }} < /app/db/app-user.sql
     tags:
-    - mysql  
+    - mysql
 
   - name: copy shipping service
     template:
@@ -126,4 +124,4 @@
     service:
       name: shipping
       state: restarted
-      enabled: yes   
+      enabled: yes
