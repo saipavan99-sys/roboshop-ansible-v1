@@ -27,7 +27,7 @@
      path: /app
      state: absent
 
-   - name: Remove cart.zip
+  - name: Remove cart.zip
     file:
      path: /tmp/cart.zip
      state: absent   
