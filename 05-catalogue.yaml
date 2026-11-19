@@ -89,6 +89,6 @@
   - name: Start and enable catalogue
     service:
      name: catalogue
-     state: present
+     state: restarted
      enabled: yes
 
