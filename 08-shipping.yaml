@@ -3,7 +3,7 @@
   become: yes
   tasks: 
   - name: enable maven 3.9
-    command: ddnf module enable maven:3.9 -y
+    command: dnf module enable maven:3.9 -y
 
   - name: install maven and java25
     dnf:
