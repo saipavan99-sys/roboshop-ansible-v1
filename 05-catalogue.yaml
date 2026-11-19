@@ -27,7 +27,7 @@
      path: /app
      state: absent
 
-   - name: Remove catalogue.zip
+  - name: Remove catalogue.zip
     file:
      path: /tmp/catalogue.zip
      state: absent   
