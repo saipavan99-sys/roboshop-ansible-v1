@@ -17,7 +17,7 @@
     dnf:
      name: 
        - erlang
-       - abbitmq-server
+       - rabbitmq-server
      state: present 
 
   - name: Start and enable rabbitmq
